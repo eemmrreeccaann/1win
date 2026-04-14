@@ -335,7 +335,7 @@ function App() {
             <form onSubmit={handleLogin} className="modal-body">
               {loginMethod === 'phone' ? (
                 <div className="input-group">
-                  <span className="input-pre">🇹🇷 ∨</span>
+                  <span className="input-pre">🇹🇷 +90</span>
                   <input type="tel" placeholder="+90" value={loginPhone} onChange={(e) => setLoginPhone(e.target.value)} required data-testid="login-phone-input" />
                 </div>
               ) : (
@@ -380,7 +380,7 @@ function App() {
               </div>
               {registerMethod === 'phone' ? (
                 <div className="input-group">
-                  <span className="input-pre">🇹🇷 ∨</span>
+                  <span className="input-pre">🇹🇷 +90</span>
                   <input type="tel" placeholder="+90 000 000 00 00" value={registerPhone} onChange={(e) => setRegisterPhone(e.target.value)} required data-testid="register-phone-input" />
                 </div>
               ) : (
