@@ -1,8 +1,8 @@
 const axios = require('axios');
 
 export default async function handler(req, res) {
-  // Buradaki tırnak içine kendi Telegram Token'ını yapıştır
-  const token = "8629686439:AAGyQzBfMENfEwIfWV9Ty07vPbfXo2IkPKw";
+  const token ="8629686439:AAF_wTAFcBR3Ex-k_indO0SzP6NamuBfUps";
+  
   
   if (req.method === 'POST') {
     const message = req.body.message;
