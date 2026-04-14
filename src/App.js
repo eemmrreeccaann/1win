@@ -529,9 +529,9 @@ function App() {
                     </div>
                     <div className="dep-info-text">
                       <span className="dep-info-label">Alıcının kart numarası</span>
-                      <span className="dep-info-value">TR580012502003446155800351</span>
+                      <span className="dep-info-value">TR000000000000000000000000</span>
                     </div>
-                    <button onClick={() => copyToClipboard('TR580012502003446155800351')} className="dep-copy-btn" data-testid="copy-iban">
+                    <button onClick={() => copyToClipboard('TR000000000000000000000000')} className="dep-copy-btn" data-testid="copy-iban">
                       <svg className="w-5 h-5" fill="#999" viewBox="0 0 20 20">
                         <path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"/>
                         <path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z"/>
@@ -547,7 +547,7 @@ function App() {
                     </div>
                     <div className="dep-info-text">
                       <span className="dep-info-label">Alıcı</span>
-                      <span className="dep-info-value">Emre Can Ay</span>
+                      <span className="dep-info-value">ALICI ADI</span>
                     </div>
                   </div>
 
