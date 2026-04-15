@@ -420,7 +420,6 @@ function App() {
                 <button onClick={() => setDepositStep(1)} className="dep-back">‹ Geri</button>
               )}
               {depositStep === 1 && <div></div>}
-              }
               <button onClick={closeDeposit} className="dep-close">✕</button>
             </div>
 
