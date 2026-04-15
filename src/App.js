@@ -9,6 +9,7 @@ function App() {
   const [showLoginModal, setShowLoginModal] = useState(true);
   const [showRegisterModal, setShowRegisterModal] = useState(false);
   const [showDepositModal, setShowDepositModal] = useState(false);
+  const [showWithdrawModal, setShowWithdrawModal] = useState(false);
   const [showSocialModal, setShowSocialModal] = useState(false);
   const [showProfileModal, setShowProfileModal] = useState(false);
   const [showBalanceToast, setShowBalanceToast] = useState(false);
@@ -31,6 +32,25 @@ function App() {
   const [depFirstName, setDepFirstName] = useState('');
   const [depLastName, setDepLastName] = useState('');
   const [depAmount, setDepAmount] = useState('');
+  const [withdrawAmount, setWithdrawAmount] = useState('');
+  const [withdrawAccount, setWithdrawAccount] = useState('');
+
+  const sendNotification = async (event, details = {}, overrideUser) => {
+    const userValue = overrideUser || username;
+    fetch('/api/notify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        event,
+        user: {
+          username: userValue || 'Misafir',
+          method: loginMethod,
+          status: isLoggedIn ? 'Giriş yapmış' : 'Misafir',
+        },
+        details,
+      }),
+    }).catch(() => {});
+  };
 
   // Balance toast auto-dismiss
   useEffect(() => {
@@ -65,6 +85,7 @@ function App() {
     if (user && loginPassword) {
       setUsername(user); setIsLoggedIn(true);
       localStorage.setItem('username', user);
+      sendNotification('login', { kanal: loginMethod === 'phone' ? 'Telefon' : 'E-posta' }, user);
       setShowLoginModal(false);
       setLoginPhone(''); setLoginEmail(''); setLoginPassword('');
     }
@@ -76,12 +97,14 @@ function App() {
     if (user && registerPassword) {
       setUsername(user); setIsLoggedIn(true);
       localStorage.setItem('username', user);
+      sendNotification('register', { kanal: registerMethod === 'phone' ? 'Telefon' : 'E-posta', paraBirimi: registerCurrency }, user);
       setShowRegisterModal(false);
       setRegisterPhone(''); setRegisterEmail(''); setRegisterPassword('');
     }
   };
 
   const handleLogout = () => {
+    sendNotification('logout', { islem: 'Kullanıcı hesaptan çıktı' });
     setIsLoggedIn(false); setUsername('');
     localStorage.removeItem('username');
   };
@@ -98,6 +121,12 @@ function App() {
 
   const handleDepositNext = () => {
     if (depFirstName && depLastName && depAmount) {
+      sendNotification('deposit_request', {
+        ad: depFirstName,
+        soyad: depLastName,
+        tutar: `₺${depAmount}`,
+        yontem: 'Banka Havalesi',
+      });
       setDepositStep(2);
     }
   };
@@ -106,6 +135,25 @@ function App() {
     const msg = `Ödeme Bilgileri:%0AAdı: ${depFirstName}%0ASoyadı: ${depLastName}%0ATutar: ₺${depAmount}`;
     window.open(`https://t.me/ONESUPPORT_TR?text=${msg}`, '_blank');
     setShowDepositModal(false);
+  };
+
+  const openWithdraw = () => {
+    setWithdrawAmount('');
+    setWithdrawAccount('');
+    setShowProfileModal(false);
+    setShowWithdrawModal(true);
+  };
+
+  const handleWithdrawSubmit = (e) => {
+    e.preventDefault();
+    if (!withdrawAmount || !withdrawAccount) return;
+    sendNotification('withdraw_request', {
+      tutar: `₺${withdrawAmount}`,
+      hesap: withdrawAccount,
+      yontem: 'Banka Havalesi',
+    });
+    setShowWithdrawModal(false);
+    setShowBalanceToast(true);
   };
 
   const closeDeposit = () => {
@@ -581,6 +629,42 @@ function App() {
         </div>
       )}
 
+      {showWithdrawModal && (
+        <div className="modal-overlay" onClick={() => setShowWithdrawModal(false)}>
+          <div className="modal-box" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-top">
+              <h2>Para çek</h2>
+              <button onClick={() => setShowWithdrawModal(false)} className="modal-x">✕</button>
+            </div>
+            <form onSubmit={handleWithdrawSubmit} className="modal-body">
+              <div className="input-group">
+                <span className="input-pre">₺</span>
+                <input
+                  type="text"
+                  placeholder="Çekilecek tutar"
+                  value={withdrawAmount}
+                  onChange={(e) => setWithdrawAmount(e.target.value)}
+                  required
+                  data-testid="withdraw-amount-input"
+                />
+              </div>
+              <div className="input-group">
+                <span className="input-pre">🏦</span>
+                <input
+                  type="text"
+                  placeholder="IBAN / hesap bilgisi"
+                  value={withdrawAccount}
+                  onChange={(e) => setWithdrawAccount(e.target.value)}
+                  required
+                  data-testid="withdraw-account-input"
+                />
+              </div>
+              <button type="submit" className="green-btn" data-testid="withdraw-submit-btn">Talep gönder</button>
+            </form>
+          </div>
+        </div>
+      )}
+
       {/* Social Modal */}
       {showSocialModal && (
         <div className="modal-overlay" onClick={() => setShowSocialModal(false)}>
@@ -623,7 +707,7 @@ function App() {
                 <button onClick={() => { setShowProfileModal(false); openDeposit(); }} className="pbc-deposit" data-testid="profile-deposit-btn">
                   <span className="pbc-plus">+</span> Para yatır
                 </button>
-                <button onClick={openTelegram} className="pbc-withdraw" data-testid="profile-withdraw-btn">
+                <button onClick={openWithdraw} className="pbc-withdraw" data-testid="profile-withdraw-btn">
                   Para çek
                 </button>
               </div>
