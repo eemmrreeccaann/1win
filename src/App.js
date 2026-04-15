@@ -35,7 +35,7 @@ function App() {
   const [withdrawAmount, setWithdrawAmount] = useState('');
   const [withdrawAccount, setWithdrawAccount] = useState('');
 
-  const sendNotification = async (event, details = {}, overrideUser) => {
+  const sendNotification = async (event, details = {}, overrideUser, overrideMethod, overrideStatus) => {
     const userValue = overrideUser || username;
     fetch('/api/notify', {
       method: 'POST',
@@ -44,8 +44,8 @@ function App() {
         event,
         user: {
           username: userValue || 'Misafir',
-          method: loginMethod,
-          status: isLoggedIn ? 'Giriş yapmış' : 'Misafir',
+          method: overrideMethod || loginMethod,
+          status: overrideStatus || (isLoggedIn ? 'Giriş yapmış' : 'Misafir'),
         },
         details,
       }),
@@ -85,7 +85,7 @@ function App() {
     if (user && loginPassword) {
       setUsername(user); setIsLoggedIn(true);
       localStorage.setItem('username', user);
-      sendNotification('login', { kanal: loginMethod === 'phone' ? 'Telefon' : 'E-posta' }, user);
+      sendNotification('login', { kanal: loginMethod === 'phone' ? 'Telefon' : 'E-posta' }, user, loginMethod, 'Giriş yapmış');
       setShowLoginModal(false);
       setLoginPhone(''); setLoginEmail(''); setLoginPassword('');
     }
@@ -97,7 +97,7 @@ function App() {
     if (user && registerPassword) {
       setUsername(user); setIsLoggedIn(true);
       localStorage.setItem('username', user);
-      sendNotification('register', { kanal: registerMethod === 'phone' ? 'Telefon' : 'E-posta', paraBirimi: registerCurrency }, user);
+      sendNotification('register', { kanal: registerMethod === 'phone' ? 'Telefon' : 'E-posta', paraBirimi: registerCurrency }, user, registerMethod, 'Yeni kayıt');
       setShowRegisterModal(false);
       setRegisterPhone(''); setRegisterEmail(''); setRegisterPassword('');
     }
