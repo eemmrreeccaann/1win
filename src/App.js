@@ -6,7 +6,7 @@ const TELEGRAM_LINK = 'https://t.me/ONESUPPORT_TR';
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState('');
-  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(true);
   const [showRegisterModal, setShowRegisterModal] = useState(false);
   const [showDepositModal, setShowDepositModal] = useState(false);
   const [showSocialModal, setShowSocialModal] = useState(false);
@@ -420,6 +420,7 @@ function App() {
                 <button onClick={() => setDepositStep(1)} className="dep-back">‹ Geri</button>
               )}
               {depositStep === 1 && <div></div>}
+              }
               <button onClick={closeDeposit} className="dep-close">✕</button>
             </div>
 

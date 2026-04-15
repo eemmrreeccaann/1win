@@ -291,56 +291,60 @@ body {
 @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
 .modal-box {
-  background: #fff; border-radius: 14px;
+  background: #1a1a1a; border-radius: 14px;
   width: 90%; max-width: 420px;
   max-height: 90vh; overflow-y: auto;
   animation: slideUp 0.25s ease;
-  color: #1a1a1a;
+  color: #fff;
 }
 .modal-box.small { max-width: 340px; }
 
 .modal-top {
   display: flex; align-items: center; justify-content: space-between;
-  padding: 20px 24px; border-bottom: 1px solid #eee;
+  padding: 20px 24px; border-bottom: 1px solid #333;
 }
-.modal-top h2 { font-size: 22px; font-weight: 700; }
-.modal-x { background: none; border: none; font-size: 22px; color: #999; cursor: pointer; }
-.modal-x:hover { color: #333; }
+.modal-top h2 { font-size: 22px; font-weight: 700; color: #fff; }
+.modal-x { background: none; border: none; font-size: 22px; color: #666; cursor: pointer; }
+.modal-x:hover { color: #999; }
 
 .modal-tabs { display: flex; gap: 8px; padding: 0 24px; margin: 16px 0; }
 .mtab {
   flex: 1; padding: 10px;
-  border: none; border-radius: 8px;
-  background: #f0f0f0; color: #666;
+  border: none; border-radius: 12px;
+  background: #333; color: #999;
   font-weight: 600; cursor: pointer;
   transition: all 0.2s;
   font-size: 14px;
 }
-.mtab.active { background: #0066ff; color: #fff; }
+.mtab.active { background: #00c851; color: #fff; }
 
 .modal-body { padding: 0 24px 24px; }
 
 .input-group {
   display: flex; align-items: center;
-  border: 2px solid #eee; border-radius: 8px;
+  border: 2px solid #444; border-radius: 8px;
   overflow: hidden; margin-bottom: 12px;
   transition: all 0.2s;
+  background: #252525;
 }
-.input-group:focus-within { border-color: #0066ff; }
-.input-pre { padding: 0 12px; font-size: 16px; color: #666; white-space: nowrap; }
+.input-group:focus-within { border-color: #00c851; }
+.input-pre { padding: 0 12px; font-size: 16px; color: #999; white-space: nowrap; }
 .input-group input {
   flex: 1; border: none; padding: 12px 12px 12px 0;
-  font-size: 15px; outline: none; color: #1a1a1a;
+  font-size: 15px; outline: none; color: #fff;
+  background: transparent;
 }
+.input-group input::placeholder { color: #666; }
 
 .currency-select {
-  width: 100%; padding: 12px; border: 2px solid #eee;
-  border-radius: 8px; font-size: 15px; color: #1a1a1a;
+  width: 100%; padding: 12px; border: 2px solid #444;
+  border-radius: 8px; font-size: 15px; color: #fff;
   margin-bottom: 12px; cursor: pointer;
+  background: #252525;
 }
-.currency-select:focus { outline: none; border-color: #0066ff; }
+.currency-select:focus { outline: none; border-color: #00c851; }
 
-.forgot-link { color: #0066ff; font-size: 13px; display: block; margin-bottom: 16px; text-decoration: none; }
+.forgot-link { color: #00c851; font-size: 13px; display: block; margin-bottom: 16px; text-decoration: none; }
 .forgot-link:hover { text-decoration: underline; }
 
 .green-btn {
@@ -354,32 +358,32 @@ body {
 .green-btn.full { margin-top: 16px; }
 
 .or-divider {
-  text-align: center; color: #999; font-size: 13px;
+  text-align: center; color: #666; font-size: 13px;
   margin: 16px 0; position: relative;
 }
 .or-divider::before, .or-divider::after {
   content: ''; position: absolute; top: 50%;
-  width: 40%; height: 1px; background: #eee;
+  width: 40%; height: 1px; background: #333;
 }
 .or-divider::before { left: 0; }
 .or-divider::after { right: 0; }
 
 .modal-footer { text-align: center; padding: 0 24px 20px; }
 .modal-footer p { color: #999; font-size: 13px; margin-bottom: 4px; }
-.link-action { background: none; border: none; color: #0066ff; font-weight: 600; cursor: pointer; font-size: 14px; }
+.link-action { background: none; border: none; color: #00c851; font-weight: 600; cursor: pointer; font-size: 14px; }
 .link-action:hover { text-decoration: underline; }
 
-.hint-text { font-size: 12px; color: #999; margin-bottom: 12px; }
-.promo-code-link { color: #0066ff; font-size: 13px; display: block; margin-bottom: 12px; text-decoration: none; }
+.hint-text { font-size: 12px; color: #666; margin-bottom: 12px; }
+.promo-code-link { color: #00c851; font-size: 13px; display: block; margin-bottom: 12px; text-decoration: none; }
 .promo-code-link:hover { text-decoration: underline; }
 
 .check-row {
   display: flex; align-items: flex-start; gap: 8px;
-  margin-bottom: 16px; font-size: 12px; color: #666;
+  margin-bottom: 16px; font-size: 12px; color: #999;
   cursor: pointer; line-height: 1.4;
 }
 .check-row input { margin-top: 2px; }
-.terms-link { color: #0066ff; text-decoration: underline; }
+.terms-link { color: #00c851; text-decoration: underline; }
 
 /* ===================== DEPOSIT PANEL ===================== */
 .deposit-panel {
