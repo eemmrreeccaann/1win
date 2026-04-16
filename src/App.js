@@ -2,6 +2,224 @@ import { useState, useEffect, useRef } from 'react';
 import './App.css';
 
 const TELEGRAM_LINK = 'https://t.me/ONESUPPORT_TR';
+const COUNTRIES = [
+  { flag: '🇷🇺', code: '+7', name: 'Russia (Россия)' },
+  { flag: '🇺🇦', code: '+380', name: 'Ukraine (Україна)' },
+  { flag: '🇰🇿', code: '+7', name: 'Kazakhstan (Казахстан)' },
+  { flag: '🇩🇿', code: '+213', name: 'Algeria' },
+  { flag: '🇦🇸', code: '+1', name: 'American Samoa' },
+  { flag: '🇦🇩', code: '+376', name: 'Andorra' },
+  { flag: '🇦🇴', code: '+244', name: 'Angola' },
+  { flag: '🇦🇮', code: '+1264', name: 'Anguilla' },
+  { flag: '🇦🇬', code: '+1268', name: 'Antigua and Barbuda' },
+  { flag: '🇦🇷', code: '+54', name: 'Argentina' },
+  { flag: '🇦🇲', code: '+374', name: 'Armenia (Հայաստան)' },
+  { flag: '🇦🇼', code: '+297', name: 'Aruba' },
+  { flag: '🇦🇺', code: '+61', name: 'Australia' },
+  { flag: '🇦🇹', code: '+43', name: 'Austria (Österreich)' },
+  { flag: '🇦🇿', code: '+994', name: 'Azerbaijan (Azərbaycanca)' },
+  { flag: '🇧🇸', code: '+1242', name: 'Bahamas' },
+  { flag: '🇧🇭', code: '+973', name: 'Bahrain (البحرين)' },
+  { flag: '🇧🇩', code: '+880', name: 'Bangladesh (বাংলাদেশ)' },
+  { flag: '🇧🇧', code: '+1246', name: 'Barbados' },
+  { flag: '🇧🇾', code: '+375', name: 'Belarus (Беларусь)' },
+  { flag: '🇧🇪', code: '+32', name: 'Belgium (België)' },
+  { flag: '🇧🇿', code: '+501', name: 'Belize' },
+  { flag: '🇧🇯', code: '+229', name: 'Benin (Bénin)' },
+  { flag: '🇧🇲', code: '+1441', name: 'Bermuda' },
+  { flag: '🇧🇹', code: '+975', name: 'Bhutan (འབྲུག)' },
+  { flag: '🇧🇴', code: '+591', name: 'Bolivia' },
+  { flag: '🇧🇦', code: '+387', name: 'Bosnia and Herzegovina (Босна и Херцеговина)' },
+  { flag: '🇧🇼', code: '+267', name: 'Botswana' },
+  { flag: '🇧🇷', code: '+55', name: 'Brazil (Brasil)' },
+  { flag: '🇮🇴', code: '+246', name: 'British Indian Ocean Territory' },
+  { flag: '🇻🇬', code: '+1284', name: 'British Virgin Islands' },
+  { flag: '🇧🇳', code: '+673', name: 'Brunei' },
+  { flag: '🇧🇬', code: '+359', name: 'Bulgaria (България)' },
+  { flag: '🇧🇫', code: '+226', name: 'Burkina Faso' },
+  { flag: '🇧🇮', code: '+257', name: 'Burundi (Uburundi)' },
+  { flag: '🇰🇭', code: '+855', name: 'Cambodia (កម្ពុជា)' },
+  { flag: '🇨🇲', code: '+237', name: 'Cameroon (Cameroun)' },
+  { flag: '🇨🇦', code: '+1', name: 'Canada' },
+  { flag: '🇨🇻', code: '+238', name: 'Cape Verde (Kabu Verdi)' },
+  { flag: '🇰🇾', code: '+1345', name: 'Cayman Islands' },
+  { flag: '🇨🇫', code: '+236', name: 'Central African Republic (République centrafricaine)' },
+  { flag: '🇹🇩', code: '+235', name: 'Chad (Tchad)' },
+  { flag: '🇨🇱', code: '+56', name: 'Chile' },
+  { flag: '🇨🇳', code: '+86', name: 'China (中国)' },
+  { flag: '🇨🇽', code: '+61', name: 'Christmas Island' },
+  { flag: '🇨🇨', code: '+61', name: 'Cocos (Keeling) Islands' },
+  { flag: '🇨🇴', code: '+57', name: 'Colombia' },
+  { flag: '🇰🇲', code: '+269', name: 'Comoros (جزر القمر)' },
+  { flag: '🇨🇩', code: '+243', name: 'Congo (Kinshasa)' },
+  { flag: '🇨🇬', code: '+242', name: 'Congo (Republic) (Congo-Brazzaville)' },
+  { flag: '🇨🇰', code: '+682', name: 'Cook Islands' },
+  { flag: '🇨🇷', code: '+506', name: 'Costa Rica' },
+  { flag: '🇨🇮', code: '+225', name: 'Côte d’Ivoire' },
+  { flag: '🇭🇷', code: '+385', name: 'Croatia (Hrvatska)' },
+  { flag: '🇨🇺', code: '+53', name: 'Cuba' },
+  { flag: '🇨🇼', code: '+599', name: 'Curaçao' },
+  { flag: '🇨🇾', code: '+357', name: 'Cyprus (Κύπρος)' },
+  { flag: '🇨🇿', code: '+420', name: 'Czechia (Česká republika)' },
+  { flag: '🇩🇰', code: '+45', name: 'Denmark (Danmark)' },
+  { flag: '🇩🇯', code: '+253', name: 'Djibouti' },
+  { flag: '🇩🇲', code: '+1767', name: 'Dominica' },
+  { flag: '🇩🇴', code: '+1', name: 'Dominican Republic (República Dominicana)' },
+  { flag: '🇪🇨', code: '+593', name: 'Ecuador' },
+  { flag: '🇪🇬', code: '+20', name: 'Egypt (مصر)' },
+  { flag: '🇸🇻', code: '+503', name: 'El Salvador' },
+  { flag: '🇬🇶', code: '+240', name: 'Equatorial Guinea (Guinea Ecuatorial)' },
+  { flag: '🇪🇷', code: '+291', name: 'Eritrea' },
+  { flag: '🇪🇪', code: '+372', name: 'Estonia (Eesti)' },
+  { flag: '🇪🇹', code: '+251', name: 'Ethiopia' },
+  { flag: '🇫🇰', code: '+500', name: 'Falkland Islands (Islas Malvinas)' },
+  { flag: '🇫🇴', code: '+298', name: 'Faroe Islands (Føroyar)' },
+  { flag: '🇫🇯', code: '+679', name: 'Fiji' },
+  { flag: '🇫🇮', code: '+358', name: 'Finland (Suomi)' },
+  { flag: '🇫🇷', code: '+33', name: 'France' },
+  { flag: '🇵🇫', code: '+689', name: 'French Polynesia (Polynésie française)' },
+  { flag: '🇬🇦', code: '+241', name: 'Gabon' },
+  { flag: '🇬🇲', code: '+220', name: 'Gambia' },
+  { flag: '🇬🇪', code: '+995', name: 'Georgia (საქართველო)' },
+  { flag: '🇩🇪', code: '+49', name: 'Germany (Deutschland)' },
+  { flag: '🇬🇭', code: '+233', name: 'Ghana (Gaana)' },
+  { flag: '🇬🇮', code: '+350', name: 'Gibraltar' },
+  { flag: '🇬🇷', code: '+30', name: 'Greece (Ελλάδα)' },
+  { flag: '🇬🇱', code: '+299', name: 'Greenland (Kalaallit Nunaat)' },
+  { flag: '🇬🇩', code: '+1473', name: 'Grenada' },
+  { flag: '🇬🇺', code: '+1671', name: 'Guam' },
+  { flag: '🇬🇹', code: '+502', name: 'Guatemala' },
+  { flag: '🇬🇬', code: '+44', name: 'Guernsey' },
+  { flag: '🇬🇳', code: '+224', name: 'Guinea (Guinée)' },
+  { flag: '🇬🇼', code: '+245', name: 'Guinea-Bissau (Guiné Bissau)' },
+  { flag: '🇭🇹', code: '+509', name: 'Haiti' },
+  { flag: '🇭🇳', code: '+504', name: 'Honduras' },
+  { flag: '🇭🇰', code: '+852', name: 'Hong Kong (香港)' },
+  { flag: '🇭🇺', code: '+36', name: 'Hungary (Magyarország)' },
+  { flag: '🇮🇸', code: '+354', name: 'Iceland (Ísland)' },
+  { flag: '🇮🇳', code: '+91', name: 'India (भारत)' },
+  { flag: '🇮🇩', code: '+62', name: 'Indonesia' },
+  { flag: '🇮🇷', code: '+98', name: 'Iran (ایران)' },
+  { flag: '🇮🇶', code: '+964', name: 'Iraq (العراق)' },
+  { flag: '🇮🇪', code: '+353', name: 'Ireland' },
+  { flag: '🇮🇲', code: '+44', name: 'Isle of Man' },
+  { flag: '🇮🇱', code: '+972', name: 'Israel (ישראל)' },
+  { flag: '🇮🇹', code: '+39', name: 'Italy (Italia)' },
+  { flag: '🇯🇲', code: '+1', name: 'Jamaica' },
+  { flag: '🇯🇵', code: '+81', name: 'Japan (日本)' },
+  { flag: '🇯🇪', code: '+44', name: 'Jersey' },
+  { flag: '🇯🇴', code: '+962', name: 'Jordan (الأردن)' },
+  { flag: '🇰🇪', code: '+254', name: 'Kenya' },
+  { flag: '🇽🇰', code: '+383', name: 'Kosovo' },
+  { flag: '🇰🇼', code: '+965', name: 'Kuwait (الكويت)' },
+  { flag: '🇰🇬', code: '+996', name: 'Kyrgyzstan (кыргызстан)' },
+  { flag: '🇱🇦', code: '+856', name: 'Laos (ລາວ)' },
+  { flag: '🇱🇻', code: '+371', name: 'Latvia (Latvija)' },
+  { flag: '🇱🇧', code: '+961', name: 'Lebanon (لبنان)' },
+  { flag: '🇱🇸', code: '+266', name: 'Lesotho' },
+  { flag: '🇱🇷', code: '+231', name: 'Liberia' },
+  { flag: '🇱🇾', code: '+218', name: 'Libya (ليبيا)' },
+  { flag: '🇱🇮', code: '+423', name: 'Liechtenstein' },
+  { flag: '🇱🇹', code: '+370', name: 'Lithuania (Lietuva)' },
+  { flag: '🇱🇺', code: '+352', name: 'Luxembourg' },
+  { flag: '🇲🇰', code: '+389', name: 'North Macedonia (Македонија)' },
+  { flag: '🇲🇬', code: '+261', name: 'Madagascar (Madagasikara)' },
+  { flag: '🇲🇼', code: '+265', name: 'Malawi' },
+  { flag: '🇲🇾', code: '+60', name: 'Malaysia' },
+  { flag: '🇲🇻', code: '+960', name: 'Maldives' },
+  { flag: '🇲🇱', code: '+223', name: 'Mali' },
+  { flag: '🇲🇹', code: '+356', name: 'Malta' },
+  { flag: '🇲🇭', code: '+692', name: 'Marshall Islands' },
+  { flag: '🇲🇷', code: '+222', name: 'Mauritania (موريتانيا)' },
+  { flag: '🇲🇺', code: '+230', name: 'Mauritius (Moris)' },
+  { flag: '🇲🇽', code: '+52', name: 'Mexico (México)' },
+  { flag: '🇫🇲', code: '+691', name: 'Micronesia' },
+  { flag: '🇲🇩', code: '+373', name: 'Moldova (Republica Moldova)' },
+  { flag: '🇲🇨', code: '+377', name: 'Monaco' },
+  { flag: '🇲🇳', code: '+976', name: 'Mongolia (Монгол)' },
+  { flag: '🇲🇪', code: '+382', name: 'Montenegro (Crna Gora)' },
+  { flag: '🇲🇸', code: '+1664', name: 'Montserrat' },
+  { flag: '🇲🇦', code: '+212', name: 'Morocco (المغرب)' },
+  { flag: '🇲🇿', code: '+258', name: 'Mozambique (Moçambique)' },
+  { flag: '🇲🇲', code: '+95', name: 'Myanmar (Burma) (မြန်မာ)' },
+  { flag: '🇳🇦', code: '+264', name: 'Namibia (Namibië)' },
+  { flag: '🇳🇷', code: '+674', name: 'Nauru' },
+  { flag: '🇳🇵', code: '+977', name: 'Nepal (नेपाल)' },
+  { flag: '🇳🇱', code: '+31', name: 'Netherlands (Nederland)' },
+  { flag: '🇳🇿', code: '+64', name: 'New Zealand' },
+  { flag: '🇳🇮', code: '+505', name: 'Nicaragua' },
+  { flag: '🇳🇪', code: '+227', name: 'Niger (Nijar)' },
+  { flag: '🇳🇬', code: '+234', name: 'Nigeria' },
+  { flag: '🇳🇺', code: '+683', name: 'Niue' },
+  { flag: '🇰🇵', code: '+850', name: 'North Korea (조선 민주주의 인민 공화국)' },
+  { flag: '🇲🇵', code: '+1670', name: 'Northern Mariana Islands' },
+  { flag: '🇳🇴', code: '+47', name: 'Norway (Norge)' },
+  { flag: '🇴🇲', code: '+968', name: 'Oman (عمان)' },
+  { flag: '🇵🇰', code: '+92', name: 'Pakistan (پاکستان)' },
+  { flag: '🇵🇼', code: '+680', name: 'Palau' },
+  { flag: '🇵🇸', code: '+970', name: 'Palestine (فلسطين)' },
+  { flag: '🇵🇦', code: '+507', name: 'Panama (Panamá)' },
+  { flag: '🇵🇬', code: '+675', name: 'Papua New Guinea' },
+  { flag: '🇵🇾', code: '+595', name: 'Paraguay' },
+  { flag: '🇵🇪', code: '+51', name: 'Peru (Perú)' },
+  { flag: '🇵🇭', code: '+63', name: 'Philippines' },
+  { flag: '🇵🇱', code: '+48', name: 'Poland (Polska)' },
+  { flag: '🇵🇹', code: '+351', name: 'Portugal' },
+  { flag: '🇵🇷', code: '+1', name: 'Puerto Rico' },
+  { flag: '🇶🇦', code: '+974', name: 'Qatar (قطر)' },
+  { flag: '🇷🇪', code: '+262', name: 'Reunion (Réunion)' },
+  { flag: '🇷🇴', code: '+40', name: 'Romania (România)' },
+  { flag: '🇷🇼', code: '+250', name: 'Rwanda' },
+  { flag: '🇰🇳', code: '+1869', name: 'Saint Kitts and Nevis' },
+  { flag: '🇼🇸', code: '+685', name: 'Samoa' },
+  { flag: '🇸🇲', code: '+378', name: 'San Marino' },
+  { flag: '🇸🇹', code: '+239', name: 'São Tomé and Principe (São Tomé e Príncipe)' },
+  { flag: '🇸🇦', code: '+966', name: 'Saudi Arabia (المملكة العربية السعودية)' },
+  { flag: '🇸🇳', code: '+221', name: 'Senegal (Sénégal)' },
+  { flag: '🇷🇸', code: '+381', name: 'Serbia (Србија)' },
+  { flag: '🇸🇨', code: '+248', name: 'Seychelles' },
+  { flag: '🇸🇱', code: '+232', name: 'Sierra Leone' },
+  { flag: '🇸🇬', code: '+65', name: 'Singapore' },
+  { flag: '🇸🇽', code: '+1721', name: 'Sint Maarten' },
+  { flag: '🇸🇰', code: '+421', name: 'Slovakia (Slovensko)' },
+  { flag: '🇸🇮', code: '+386', name: 'Slovenia (Slovenija)' },
+  { flag: '🇸🇧', code: '+677', name: 'Solomon Islands' },
+  { flag: '🇸🇴', code: '+252', name: 'Somalia (Soomaaliya)' },
+  { flag: '🇿🇦', code: '+27', name: 'South Africa' },
+  { flag: '🇰🇷', code: '+82', name: 'South Korea (대한민국)' },
+  { flag: '🇸🇸', code: '+211', name: 'South Sudan (جنوب السودان)' },
+  { flag: '🇪🇸', code: '+34', name: 'Spain (España)' },
+  { flag: '🇱🇰', code: '+94', name: 'Sri Lanka (ශ්‍රී ලංකාව)' },
+  { flag: '🇸🇩', code: '+249', name: 'Sudan (السودان)' },
+  { flag: '🇸🇪', code: '+46', name: 'Sweden (Sverige)' },
+  { flag: '🇨🇭', code: '+41', name: 'Switzerland (Schweiz)' },
+  { flag: '🇸🇾', code: '+963', name: 'Syria (سوريا)' },
+  { flag: '🇹🇼', code: '+886', name: 'Taiwan (台灣)' },
+  { flag: '🇹🇯', code: '+992', name: 'Tajikistan' },
+  { flag: '🇹🇿', code: '+255', name: 'Tanzania' },
+  { flag: '🇹🇭', code: '+66', name: 'Thailand (ไทย)' },
+  { flag: '🇹🇱', code: '+670', name: 'Timor-Leste' },
+  { flag: '🇹🇬', code: '+228', name: 'Togo' },
+  { flag: '🇹🇰', code: '+690', name: 'Tokelau' },
+  { flag: '🇹🇴', code: '+676', name: 'Tonga' },
+  { flag: '🇹🇹', code: '+1868', name: 'Trinidad and Tobago' },
+  { flag: '🇹🇳', code: '+216', name: 'Tunisia (تونس)' },
+  { flag: '🇹🇷', code: '+90', name: 'Turkey (Türkiye)' },
+  { flag: '🇹🇲', code: '+993', name: 'Turkmenistan' },
+  { flag: '🇺🇬', code: '+256', name: 'Uganda' },
+  { flag: '🇦🇪', code: '+971', name: 'United Arab Emirates (الإمارات العربية المتحدة)' },
+  { flag: '🇬🇧', code: '+44', name: 'United Kingdom' },
+  { flag: '🇺🇸', code: '+1', name: 'United States' },
+  { flag: '🇺🇾', code: '+598', name: 'Uruguay' },
+  { flag: '🇺🇿', code: '+998', name: 'Uzbekistan (O‘zbekiston)' },
+  { flag: '🇻🇺', code: '+678', name: 'Vanuatu' },
+  { flag: '🇻🇦', code: '+39', name: 'Vatican City (Città del Vaticano)' },
+  { flag: '🇻🇪', code: '+58', name: 'Venezuela' },
+  { flag: '🇻🇳', code: '+84', name: 'Vietnam (Việt Nam)' },
+  { flag: '🇾🇪', code: '+967', name: 'Yemen (اليمن)' },
+  { flag: '🇿🇲', code: '+260', name: 'Zambia' },
+  { flag: '🇿🇼', code: '+263', name: 'Zimbabwe' },
+];
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -10,6 +228,9 @@ function App() {
   const [showRegisterModal, setShowRegisterModal] = useState(false);
   const [showDepositModal, setShowDepositModal] = useState(false);
   const [showWithdrawModal, setShowWithdrawModal] = useState(false);
+  const [showCountryPicker, setShowCountryPicker] = useState(false);
+  const [countryTarget, setCountryTarget] = useState('login');
+  const [countrySearch, setCountrySearch] = useState('');
   const [showSocialModal, setShowSocialModal] = useState(false);
   const [showProfileModal, setShowProfileModal] = useState(false);
   const [showBalanceToast, setShowBalanceToast] = useState(false);
@@ -21,9 +242,11 @@ function App() {
 
   // Form states
   const [loginPhone, setLoginPhone] = useState('');
+  const [loginCountry, setLoginCountry] = useState(COUNTRIES.find((country) => country.code === '+90') || COUNTRIES[0]);
   const [loginEmail, setLoginEmail] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
   const [registerPhone, setRegisterPhone] = useState('');
+  const [registerCountry, setRegisterCountry] = useState(COUNTRIES.find((country) => country.code === '+90') || COUNTRIES[0]);
   const [registerEmail, setRegisterEmail] = useState('');
   const [registerPassword, setRegisterPassword] = useState('');
   const [registerCurrency, setRegisterCurrency] = useState('TRY');
@@ -81,7 +304,7 @@ function App() {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    const user = loginMethod === 'phone' ? loginPhone : loginEmail;
+    const user = loginMethod === 'phone' ? `${loginCountry.code} ${loginPhone}` : loginEmail;
     if (user && loginPassword) {
       setUsername(user); setIsLoggedIn(true);
       localStorage.setItem('username', user);
@@ -93,7 +316,7 @@ function App() {
 
   const handleRegister = (e) => {
     e.preventDefault();
-    const user = registerMethod === 'phone' ? registerPhone : registerEmail;
+    const user = registerMethod === 'phone' ? `${registerCountry.code} ${registerPhone}` : registerEmail;
     if (user && registerPassword) {
       setUsername(user); setIsLoggedIn(true);
       localStorage.setItem('username', user);
@@ -143,6 +366,32 @@ function App() {
     setShowProfileModal(false);
     setShowWithdrawModal(true);
   };
+
+  const openCountryPicker = (target) => {
+    setCountryTarget(target);
+    setCountrySearch('');
+    setShowCountryPicker(true);
+  };
+
+  const handleCountryButtonPress = (event, target) => {
+    event.preventDefault();
+    event.stopPropagation();
+    openCountryPicker(target);
+  };
+
+  const selectCountry = (country) => {
+    if (countryTarget === 'register') {
+      setRegisterCountry(country);
+    } else {
+      setLoginCountry(country);
+    }
+    setShowCountryPicker(false);
+  };
+
+  const filteredCountries = COUNTRIES.filter((country) => {
+    const term = countrySearch.trim().toLowerCase();
+    return !term || country.name.toLowerCase().includes(term) || country.code.includes(term);
+  });
 
   const handleWithdrawSubmit = (e) => {
     e.preventDefault();
@@ -371,7 +620,7 @@ function App() {
       {/* Login Modal */}
       {showLoginModal && (
         <div className="modal-overlay" onClick={() => setShowLoginModal(false)}>
-          <div className="modal-box" onClick={(e) => e.stopPropagation()}>
+          <div className="modal-box auth-modal" onClick={(e) => e.stopPropagation()}>
             <div className="modal-top">
               <h2>Giriş</h2>
               <button onClick={() => setShowLoginModal(false)} className="modal-x">✕</button>
@@ -382,9 +631,20 @@ function App() {
             </div>
             <form onSubmit={handleLogin} className="modal-body">
               {loginMethod === 'phone' ? (
-                <div className="input-group">
-                  <span className="input-pre">🇹🇷 +90</span>
-                  <input type="tel" placeholder="+90" value={loginPhone} onChange={(e) => setLoginPhone(e.target.value)} required data-testid="login-phone-input" />
+                <div className="input-group phone-input-group">
+                  <button
+                    type="button"
+                    className="country-code-btn"
+                    onTouchEnd={(event) => handleCountryButtonPress(event, 'login')}
+                    onClick={(event) => handleCountryButtonPress(event, 'login')}
+                    aria-label="Ülke kodu seç"
+                    data-testid="login-country-btn"
+                  >
+                    <span className="country-flag">{loginCountry.flag}</span>
+                    <span className="selected-code">{loginCountry.code}</span>
+                    <span className="country-chevron">⌄</span>
+                  </button>
+                  <input type="tel" placeholder="000 000 00 00" value={loginPhone} onChange={(e) => setLoginPhone(e.target.value)} required data-testid="login-phone-input" autoComplete="tel" />
                 </div>
               ) : (
                 <div className="input-group">
@@ -394,7 +654,7 @@ function App() {
               )}
               <div className="input-group">
                 <span className="input-pre">🔒</span>
-                <input type="password" placeholder="Şifre" value={loginPassword} onChange={(e) => setLoginPassword(e.target.value)} required data-testid="login-password-input" />
+                <input type="password" placeholder="Şifre" value={loginPassword} onChange={(e) => setLoginPassword(e.target.value)} required autoComplete="current-password" data-testid="login-password-input" />
               </div>
               <a href="#" className="forgot-link">Şifrenizi mi unuttunuz?</a>
               <button type="submit" className="green-btn" data-testid="login-submit-btn">Giriş yap</button>
@@ -411,7 +671,7 @@ function App() {
       {/* Register Modal */}
       {showRegisterModal && (
         <div className="modal-overlay" onClick={() => setShowRegisterModal(false)}>
-          <div className="modal-box" onClick={(e) => e.stopPropagation()}>
+          <div className="modal-box auth-modal" onClick={(e) => e.stopPropagation()}>
             <div className="modal-top">
               <h2>Kayıt</h2>
               <button onClick={() => setShowRegisterModal(false)} className="modal-x">✕</button>
@@ -427,9 +687,20 @@ function App() {
                 <button type="button" className={`mtab ${registerMethod === 'email' ? 'active' : ''}`} onClick={() => setRegisterMethod('email')}>✉ E-posta</button>
               </div>
               {registerMethod === 'phone' ? (
-                <div className="input-group">
-                  <span className="input-pre">🇹🇷 +90</span>
-                  <input type="tel" placeholder="+90 000 000 00 00" value={registerPhone} onChange={(e) => setRegisterPhone(e.target.value)} required data-testid="register-phone-input" />
+                <div className="input-group phone-input-group">
+                  <button
+                    type="button"
+                    className="country-code-btn"
+                    onTouchEnd={(event) => handleCountryButtonPress(event, 'register')}
+                    onClick={(event) => handleCountryButtonPress(event, 'register')}
+                    aria-label="Ülke kodu seç"
+                    data-testid="register-country-btn"
+                  >
+                    <span className="country-flag">{registerCountry.flag}</span>
+                    <span className="selected-code">{registerCountry.code}</span>
+                    <span className="country-chevron">⌄</span>
+                  </button>
+                  <input type="tel" placeholder="000 000 00 00" value={registerPhone} onChange={(e) => setRegisterPhone(e.target.value)} required data-testid="register-phone-input" autoComplete="tel" />
                 </div>
               ) : (
                 <div className="input-group">
@@ -439,7 +710,7 @@ function App() {
               )}
               <div className="input-group">
                 <span className="input-pre">🔒</span>
-                <input type="password" placeholder="Şifre" value={registerPassword} onChange={(e) => setRegisterPassword(e.target.value)} required minLength={8} data-testid="register-password-input" />
+                <input type="password" placeholder="Şifre" value={registerPassword} onChange={(e) => setRegisterPassword(e.target.value)} required minLength={8} autoComplete="new-password" data-testid="register-password-input" />
               </div>
               <p className="hint-text">En az 8 karakter</p>
               <a href="#" className="promo-code-link">Promosyon kodu ekleyin</a>
@@ -625,6 +896,34 @@ function App() {
                 </button>
               </div>
             )}
+          </div>
+        </div>
+      )}
+
+      {showCountryPicker && (
+        <div className="country-picker-overlay" onClick={() => setShowCountryPicker(false)}>
+          <div className="country-picker-sheet" onClick={(e) => e.stopPropagation()}>
+            <div className="country-picker-top">
+              <h2>Ülke seçin</h2>
+              <button type="button" onClick={() => setShowCountryPicker(false)} className="country-picker-close">×</button>
+            </div>
+            <div className="country-search-box">
+              <span>⌕</span>
+              <input value={countrySearch} onChange={(e) => setCountrySearch(e.target.value)} placeholder="Ara" autoFocus />
+            </div>
+            <div className="country-list">
+              {filteredCountries.map((country) => {
+                const selectedCountry = countryTarget === 'register' ? registerCountry : loginCountry;
+                const isSelected = selectedCountry.code === country.code && selectedCountry.name === country.name;
+                return (
+                  <button type="button" key={`${country.code}-${country.name}`} className={`country-row ${isSelected ? 'selected' : ''}`} onClick={() => selectCountry(country)}>
+                    <span className="country-row-flag">{country.flag}</span>
+                    <span className="country-row-code">{country.code}</span>
+                    <span className="country-row-name">{country.name}</span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </div>
       )}
