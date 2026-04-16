@@ -18,3 +18,4 @@ This is a Create React App frontend migrated from a Vercel-style import to run o
 - Fixed a JSX syntax error in the deposit modal header.
 - Removed imported third-party analytics/bootstrap scripts from `public/index.html` to keep the frontend self-contained.
 - Added a Node notification server so login, registration, deposit requests, withdrawal requests, and logout events send Telegram notifications without exposing the bot token to browser code.
+- Added and refined a phone country-code picker to the login and registration phone fields with a searchable country list, flags, dial codes, and Turkey selected by default. The whole flag/code area opens the selector.
