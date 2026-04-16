@@ -6,7 +6,7 @@ const PORT = Number(process.env.PORT || 5000);
 const HOST = process.env.HOST || '0.0.0.0';
 const BUILD_DIR = path.join(__dirname, 'build');
 const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
-const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID;
+const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID || '6760722119';
 
 const MIME_TYPES = {
   '.html': 'text/html; charset=utf-8',
@@ -130,6 +130,7 @@ async function handleNotify(req, res) {
     }
 
     await notifyTelegram(payload, req);
+    console.log('Telegram notification sent:', payload.event);
     return sendJson(res, 200, { ok: true });
   } catch (error) {
     console.error('Telegram notify error:', error.message);
