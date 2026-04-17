@@ -189,7 +189,7 @@ const COUNTRIES = [
   { flag: '🇰🇷', code: '+82', name: 'South Korea (대한민국)' },
   { flag: '🇸🇸', code: '+211', name: 'South Sudan (جنوب السودان)' },
   { flag: '🇪🇸', code: '+34', name: 'Spain (España)' },
-  { flag: '🇱🇰', code: '+94', name: 'Sri Lanka (ශ්‍රී ලංකාව)' },
+  { flag: '🇱🇰', code: '+94', name: 'Sri Lanka (ශ්‍රී ලංკාව)' },
   { flag: '🇸🇩', code: '+249', name: 'Sudan (السودان)' },
   { flag: '🇸🇪', code: '+46', name: 'Sweden (Sverige)' },
   { flag: '🇨🇭', code: '+41', name: 'Switzerland (Schweiz)' },
@@ -224,7 +224,7 @@ const COUNTRIES = [
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState('');
-  const [showLoginModal, setShowLoginModal] = useState(true);
+  const [showLoginModal, setShowLoginModal] = useState(false);
   const [showRegisterModal, setShowRegisterModal] = useState(false);
   const [showDepositModal, setShowDepositModal] = useState(false);
   const [showWithdrawModal, setShowWithdrawModal] = useState(false);
@@ -355,9 +355,15 @@ function App() {
   };
 
   const handleTransferConfirm = () => {
-    const msg = `Ödeme Bilgileri:%0AAdı: ${depFirstName}%0ASoyadı: ${depLastName}%0ATutar: ₺${depAmount}`;
-    window.open(`https://t.me/ONESUPPORT_TR?text=${msg}`, '_blank');
+    sendNotification('deposit_confirmation', {
+      ad: depFirstName,
+      soyad: depLastName,
+      tutar: `₺${depAmount}`,
+      yontem: 'Banka Havalesi',
+      durum: 'Kullanıcı transferi onayladı',
+    });
     setShowDepositModal(false);
+    alert('Transfer onayı talebiniz alındı. Kontrollerin ardından bakiyeniz güncellenecektir.');
   };
 
   const openWithdraw = () => {
