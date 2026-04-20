@@ -68,7 +68,42 @@ app.post('/api/notify', async (req, res) => {
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
+// Gelen mesajları dinlemek için basit bir Polling mekanizması
+const startBot = async () => {
+  let lastUpdateId = 0;
+  console.log("Bot dinlemeye başladı...");
 
+  setInterval(async () => {
+    try {
+      const response = await fetch(https://api.telegram.org/bot${BOT_TOKEN}/getUpdates?offset=${lastUpdateId + 1});
+      const data = await response.json();
+
+      if (data.result && data.result.length > 0) {
+        for (const update of data.result) {
+          lastUpdateId = update.update_id;
+          const chatId = update.message.chat.id;
+          const text = update.message.text;
+
+          console.log(Mesaj geldi: ${text} (Chat ID: ${chatId}));
+
+          // Eşleştirme kodu olarak Chat ID'yi veya sabit bir kodu gönderelim
+          await fetch(https://api.telegram.org/bot${BOT_TOKEN}/sendMessage, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              chat_id: chatId,
+              text: ✅ Bot Aktif!\n\nEşleştirme Kodunuz: ${chatId}\n\nBu kodu ekrana girerek kurulumu tamamlayabilirsiniz.,
+            }),
+          });
+        }
+      }
+    } catch (err) {
+      // Sessizce devam et
+    }
+  }, 3000); // Her 3 saniyede bir yeni mesaj var mı diye bak
+};
+
+startBot(); // Fonksiyonu çalıştır
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
