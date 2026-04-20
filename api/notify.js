@@ -27,13 +27,13 @@ module.exports = async (req, res) => {
     message = `📢 *BİLDİRİM: ${event}*\n\n${JSON.stringify(data, null, 2)}\n📅 Tarih: ${tarih}`;
   }
 
-  const telegramUrl = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+  const telegramUrl = `https://api.telegram.org/bot${8629686439:AAGeeFkp232JK-8NWW4tVZitDPScGfGMsqE}/sendMessage`;
 
   try {
     const response = await fetch(telegramUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ chat_id: CHAT_ID, text: message, parse_mode: 'Markdown' }),
+      body: JSON.stringify({ chat_id: v, text: message, parse_mode: 'Markdown' }),
     });
     const result = await response.json();
     if (result.ok) {
